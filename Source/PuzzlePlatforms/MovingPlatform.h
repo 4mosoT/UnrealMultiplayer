@@ -20,7 +20,15 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 protected:
-	UPROPERTY(EditAnywhere, Category = Speed)
-		float Speed = 5.f;
+	UPROPERTY(EditAnywhere, Category = Moving)
+	float Speed = 20.f;
+	UPROPERTY(EditAnywhere, Category = Moving, Meta = (MakeEditWidget = true))
+	FVector TargetLocation;
+
+private:
+	FVector Direction;
+	FVector StartLocation;
+	FVector GlobalTargetLocation;
+	float JourneyLength;
 	
 };
