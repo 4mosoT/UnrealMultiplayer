@@ -31,11 +31,8 @@ void AMovingPlatform::Tick(float DeltaTime)
 		FVector Location = GetActorLocation();
 		if ( (Location - StartLocation).Size() > JourneyLength) {
 			Direction *= -1;
-			FVector aux = GlobalTargetLocation;
-			GlobalTargetLocation = StartLocation;
-			StartLocation = aux;
+			Swap(GlobalTargetLocation, StartLocation);
 		}
-
 		SetActorLocation(Location + DeltaTime * Direction * Speed); 
 	}
 	}	
