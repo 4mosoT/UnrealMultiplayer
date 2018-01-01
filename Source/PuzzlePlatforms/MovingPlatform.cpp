@@ -21,7 +21,6 @@ void AMovingPlatform::BeginPlay()
 	GlobalTargetLocation = GetTransform().TransformPosition(TargetLocation);
 	Direction = (GlobalTargetLocation - GetActorLocation()).GetSafeNormal();
 	JourneyLength = (GlobalTargetLocation - StartLocation).Size();
-	UE_LOG(LogTemp, Warning, TEXT("JourneyLength: %f"), JourneyLength)
 }
 
 void AMovingPlatform::Tick(float DeltaTime)
