@@ -16,6 +16,8 @@ void UPuzzlePlatformsGameInstace::Init() {
 void UPuzzlePlatformsGameInstace::Host()
 {
 	GetEngine()->AddOnScreenDebugMessage(0, 2, FColor::White, TEXT("Hosting"));
+
+	GetWorld()->ServerTravel("/Game/ThirdPersonCPP/Maps/ThirdPersonExampleMap?listen");
 }
 
 void UPuzzlePlatformsGameInstace::Join(const FString& IPAddress)
