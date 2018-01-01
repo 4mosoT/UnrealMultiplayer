@@ -23,6 +23,16 @@ void UPuzzlePlatformsGameInstace::LoadMenu()
 {
 	UUserWidget* Menu = CreateWidget<UUserWidget>(this, MenuClass);
 	Menu->AddToViewport();
+
+	APlayerController* PlayerController = GetFirstLocalPlayerController();
+
+	FInputModeUIOnly InputMode;
+	InputMode.SetWidgetToFocus(Menu->TakeWidget());
+	InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+	PlayerController->SetInputMode(InputMode);
+
+	PlayerController->bShowMouseCursor = true;
+
 }
 
 void UPuzzlePlatformsGameInstace::Host()
