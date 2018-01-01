@@ -2,15 +2,21 @@
 
 #include "PuzzlePlatformsGameInstace.h"
 #include "Engine/Engine.h"
+#include "UObject/ConstructorHelpers.h"
+#include "PlatformTrigger.h"
+#include "Blueprint/UserWidget.h"
 
 
 
 UPuzzlePlatformsGameInstace::UPuzzlePlatformsGameInstace(const FObjectInitializer &ObjectInitializer) {
-	UE_LOG(LogTemp, Warning, TEXT("Constructor"))
+	ConstructorHelpers::FClassFinder<UUserWidget> PlatformBPClass(TEXT("/Game/MenuSystem/WBP_MainMenu"));
+	if (PlatformBPClass.Class != NULL) {
+		MenuClass = PlatformBPClass.Class;
+	}
 }
 
 void UPuzzlePlatformsGameInstace::Init() {
-	UE_LOG(LogTemp, Warning, TEXT("Init "))
+	UE_LOG(LogTemp, Warning, TEXT("Found Class %s"), *MenuClass->GetName())
 }
 
 void UPuzzlePlatformsGameInstace::Host()
@@ -23,4 +29,5 @@ void UPuzzlePlatformsGameInstace::Host()
 void UPuzzlePlatformsGameInstace::Join(const FString& IPAddress)
 {
 	GetEngine()->AddOnScreenDebugMessage(0, 2, FColor::White, FString::Printf(TEXT("Joining %s"), *IPAddress));
+	GetFirstLocalPlayerController()->ClientTravel(IPAddress, ETravelType::TRAVEL_Absolute);
 }
