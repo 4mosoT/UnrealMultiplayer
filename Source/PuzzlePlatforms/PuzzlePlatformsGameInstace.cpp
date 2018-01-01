@@ -19,6 +19,12 @@ void UPuzzlePlatformsGameInstace::Init() {
 	UE_LOG(LogTemp, Warning, TEXT("Found Class %s"), *MenuClass->GetName())
 }
 
+void UPuzzlePlatformsGameInstace::LoadMenu()
+{
+	UUserWidget* Menu = CreateWidget<UUserWidget>(this, MenuClass);
+	Menu->AddToViewport();
+}
+
 void UPuzzlePlatformsGameInstace::Host()
 {
 	GetEngine()->AddOnScreenDebugMessage(0, 2, FColor::White, TEXT("Hosting"));
