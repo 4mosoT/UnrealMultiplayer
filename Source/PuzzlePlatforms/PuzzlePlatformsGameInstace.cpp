@@ -5,6 +5,7 @@
 #include "UObject/ConstructorHelpers.h"
 #include "PlatformTrigger.h"
 #include "Blueprint/UserWidget.h"
+#include "MenuSystem/MainMenu.h"
 
 
 
@@ -21,7 +22,7 @@ void UPuzzlePlatformsGameInstace::Init() {
 
 void UPuzzlePlatformsGameInstace::LoadMenu()
 {
-	UUserWidget* Menu = CreateWidget<UUserWidget>(this, MenuClass);
+	UMainMenu* Menu = CreateWidget<UMainMenu>(this, MenuClass);
 	Menu->AddToViewport();
 
 	APlayerController* PlayerController = GetFirstLocalPlayerController();
@@ -32,6 +33,8 @@ void UPuzzlePlatformsGameInstace::LoadMenu()
 	PlayerController->SetInputMode(InputMode);
 
 	PlayerController->bShowMouseCursor = true;
+
+	Menu->SetMenuInterface(this);
 
 }
 
