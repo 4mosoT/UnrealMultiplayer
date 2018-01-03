@@ -22,27 +22,19 @@ void UPuzzlePlatformsGameInstace::Init() {
 
 void UPuzzlePlatformsGameInstace::LoadMenu()
 {
-	UMainMenu* Menu = CreateWidget<UMainMenu>(this, MenuClass);
-	Menu->AddToViewport();
-
-	APlayerController* PlayerController = GetFirstLocalPlayerController();
-
-	FInputModeUIOnly InputMode;
-	InputMode.SetWidgetToFocus(Menu->TakeWidget());
-	InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
-	PlayerController->SetInputMode(InputMode);
-
-	PlayerController->bShowMouseCursor = true;
-
+	Menu = CreateWidget<UMainMenu>(this, MenuClass);
+	Menu->Setup();
 	Menu->SetMenuInterface(this);
 
 }
 
 void UPuzzlePlatformsGameInstace::Host()
 {
+	if(Menu != nullptr)	Menu->Teardown();
 	GetEngine()->AddOnScreenDebugMessage(0, 2, FColor::White, TEXT("Hosting"));
-
 	GetWorld()->ServerTravel("/Game/ThirdPersonCPP/Maps/ThirdPersonExampleMap?listen");
+
+
 }
 
 void UPuzzlePlatformsGameInstace::Join(const FString& IPAddress)

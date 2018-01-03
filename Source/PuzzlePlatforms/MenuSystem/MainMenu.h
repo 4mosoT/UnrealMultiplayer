@@ -18,6 +18,9 @@ class PUZZLEPLATFORMS_API UMainMenu : public UUserWidget
 
 public:
 	void SetMenuInterface(IMenuInterface* MenuInterface);
+	
+	void Setup();
+	void Teardown();
 
 protected:
 
@@ -35,5 +38,7 @@ private:
 	void HostServer();
 
 	IMenuInterface* MenuInterface;
+
+	APlayerController* PlayerController;
 	
 };

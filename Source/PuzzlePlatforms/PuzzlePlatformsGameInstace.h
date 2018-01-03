@@ -7,7 +7,7 @@
 #include "MenuSystem/MenuInterface.h"
 #include "PuzzlePlatformsGameInstace.generated.h"
 
-
+class UMainMenu;
 /**
  * 
  */
@@ -31,4 +31,5 @@ public:
 
 private:
 	TSubclassOf<UUserWidget> MenuClass;
+	UMainMenu* Menu;
 };

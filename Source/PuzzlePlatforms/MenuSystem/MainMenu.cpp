@@ -2,8 +2,30 @@
 
 #include "MainMenu.h"
 #include "Components/Button.h"
+#include "Engine/World.h"
 #include "MenuInterface.h"
 
+
+void UMainMenu::Setup()
+{
+	this->AddToViewport();
+	PlayerController = GetWorld()->GetFirstPlayerController();
+	FInputModeUIOnly InputMode;
+	InputMode.SetWidgetToFocus(this->TakeWidget());
+	InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+	PlayerController->SetInputMode(InputMode);
+	PlayerController->bShowMouseCursor = true;
+}
+
+void UMainMenu::Teardown()
+{
+	this->RemoveFromViewport();
+	PlayerController->bShowMouseCursor = false;
+	FInputModeGameOnly InputMode;
+	PlayerController->SetInputMode(InputMode);
+	
+		
+}
 
 bool UMainMenu::Initialize()
 {
