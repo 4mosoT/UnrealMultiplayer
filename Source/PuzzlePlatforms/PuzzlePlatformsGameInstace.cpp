@@ -39,6 +39,7 @@ void UPuzzlePlatformsGameInstace::Host()
 
 void UPuzzlePlatformsGameInstace::Join(const FString& IPAddress)
 {
+	if (Menu != nullptr) Menu->Teardown();
 	GetEngine()->AddOnScreenDebugMessage(0, 2, FColor::White, FString::Printf(TEXT("Joining %s"), *IPAddress));
 	GetFirstLocalPlayerController()->ClientTravel(IPAddress, ETravelType::TRAVEL_Absolute);
 }

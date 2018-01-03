@@ -6,6 +6,8 @@
 #include "Blueprint/UserWidget.h"
 #include "MainMenu.generated.h"
 
+class UWidget;
+class UEditableTextBox;
 class UButton;
 class UWidgetSwitcher;
 class IMenuInterface;
@@ -19,7 +21,6 @@ class PUZZLEPLATFORMS_API UMainMenu : public UUserWidget
 
 public:
 	void SetMenuInterface(IMenuInterface* MenuInterface);
-	
 	void Setup();
 	void Teardown();
 
@@ -47,6 +48,12 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	UButton* CancelJoinButton;
 
+	UPROPERTY(meta = (BindWidget))
+	UButton* AcceptJoinButton;
+
+	UPROPERTY(meta = (BindWidget))
+	UEditableTextBox* IPAddressTextBox;
+
 	UFUNCTION()
 	void HostServer();
 
@@ -55,6 +62,9 @@ private:
 
 	UFUNCTION()
 	void CancelJoinMenu();
+
+	UFUNCTION()
+	void JoinServer();
 
 	IMenuInterface* MenuInterface;
 	
