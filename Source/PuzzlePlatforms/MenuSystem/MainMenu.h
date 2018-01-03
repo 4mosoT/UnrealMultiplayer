@@ -7,6 +7,7 @@
 #include "MainMenu.generated.h"
 
 class UButton;
+class UWidgetSwitcher;
 class IMenuInterface;
 /**
  * 
@@ -34,11 +35,29 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	UButton* JoinButton;
 
+	UPROPERTY(meta = (BindWidget))
+	UWidgetSwitcher* MenuSwitcher;
+
+	UPROPERTY(meta = (BindWidget))
+	UWidget* MainMenu;
+
+	UPROPERTY(meta = (BindWidget))
+	UWidget* JoinMenu;
+
+	UPROPERTY(meta = (BindWidget))
+	UButton* CancelJoinButton;
+
 	UFUNCTION()
 	void HostServer();
 
-	IMenuInterface* MenuInterface;
+	UFUNCTION()
+	void OpenJoinMenu();
 
+	UFUNCTION()
+	void CancelJoinMenu();
+
+	IMenuInterface* MenuInterface;
+	
 	APlayerController* PlayerController;
 	
 };
