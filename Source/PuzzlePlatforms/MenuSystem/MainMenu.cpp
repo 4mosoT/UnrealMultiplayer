@@ -16,6 +16,7 @@ bool UMainMenu::Initialize()
 	JoinButton->OnClicked.AddDynamic(this, &UMainMenu::OpenJoinMenu);
 	CancelJoinButton->OnClicked.AddDynamic(this, &UMainMenu::CancelJoinMenu);
 	AcceptJoinButton->OnClicked.AddDynamic(this, &UMainMenu::JoinServer);
+	QuitButton->OnClicked.AddDynamic(this, &UMainMenu::QuitGame);
 
 	return true;
 }
@@ -41,5 +42,10 @@ void UMainMenu::JoinServer()
 {
 	FString IPAddress = IPAddressTextBox->GetText().ToString();
 	if (IPAddress.Len() > 0 && MenuInterface != nullptr) MenuInterface->Join(IPAddress); else IPAddressTextBox->SetText(FText::FromString(TEXT("You must enter a valid IP")));
+}
+
+void UMainMenu::QuitGame()
+{
+	PlayerController->ConsoleCommand(TEXT("quit"), false);
 }
 
