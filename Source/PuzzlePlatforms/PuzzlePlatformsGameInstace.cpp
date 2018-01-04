@@ -7,6 +7,7 @@
 #include "Blueprint/UserWidget.h"
 #include "MenuSystem/MainMenu.h"
 #include "MenuSystem/InGameMenu.h"
+#include "OnlineSubsystem.h"
 
 
 
@@ -21,7 +22,9 @@ UPuzzlePlatformsGameInstace::UPuzzlePlatformsGameInstace(const FObjectInitialize
 }
 
 void UPuzzlePlatformsGameInstace::Init() {
-	UE_LOG(LogTemp, Warning, TEXT("Found Class %s"), *MenuClass->GetName())
+	IOnlineSubsystem* OSS = IOnlineSubsystem::Get();
+	if (OSS != nullptr)
+	UE_LOG(LogTemp, Warning, TEXT("Online subsystem: %s"), *OSS->GetSubsystemName().ToString())
 }
 
 void UPuzzlePlatformsGameInstace::LoadInGameMenu()
@@ -31,7 +34,7 @@ void UPuzzlePlatformsGameInstace::LoadInGameMenu()
 	InGameMenu->SetMenuInterface(this);
 }
 
-void UPuzzlePlatformsGameInstace::LoadMenu()
+void UPuzzlePlatformsGameInstace::LoadMenuWidget()	
 {
 	Menu = CreateWidget<UMainMenu>(this, MenuClass);
 	Menu->Setup();
