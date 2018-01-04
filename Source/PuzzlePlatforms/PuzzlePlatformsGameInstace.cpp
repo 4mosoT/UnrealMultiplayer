@@ -8,6 +8,10 @@
 #include "MenuSystem/MainMenu.h"
 #include "MenuSystem/InGameMenu.h"
 #include "OnlineSubsystem.h"
+#include "OnlineSessionInterface.h"
+#include "OnlineSessionSettings.h"
+
+
 
 
 
@@ -24,8 +28,8 @@ UPuzzlePlatformsGameInstace::UPuzzlePlatformsGameInstace(const FObjectInitialize
 void UPuzzlePlatformsGameInstace::Init() {
 	IOnlineSubsystem* OSS = IOnlineSubsystem::Get();
 	if (OSS != nullptr)	UE_LOG(LogTemp, Warning, TEXT("Online subsystem: %s"), *OSS->GetSubsystemName().ToString())
-	IOnlineSessionPtr SessionInterface = OSS->GetSessionInterface();
-	if(SessionInterface.IsValid()) UE_LOG(LogTemp, Warning, TEXT("Found Online Session"))
+	SessionInterface = OSS->GetSessionInterface();
+
 }
 
 void UPuzzlePlatformsGameInstace::LoadInGameMenu()
@@ -43,13 +47,22 @@ void UPuzzlePlatformsGameInstace::LoadMenuWidget()
 	
 }
 
-void UPuzzlePlatformsGameInstace::Host()
+void UPuzzlePlatformsGameInstace::Host() 
 {
+	FOnlineSessionSettings SessionSettings;
+	SessionInterface->CreateSession(0, TEXT("My Session Game"), SessionSettings);
+	SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UPuzzlePlatformsGameInstace::OnCreateSessionComplete);
+}
+
+void UPuzzlePlatformsGameInstace::OnCreateSessionComplete(FName SessionName, bool Success)
+{
+	if (!Success) {
+		UE_LOG(LogTemp, Warning, TEXT("Couldn't Create Session"))
+		return;
+	}
 	if(Menu != nullptr)	Menu->Teardown();
 	GetEngine()->AddOnScreenDebugMessage(0, 2, FColor::White, TEXT("Hosting"));
 	GetWorld()->ServerTravel("/Game/ThirdPersonCPP/Maps/ThirdPersonExampleMap?listen");
-
-
 }
 
 void UPuzzlePlatformsGameInstace::Join(const FString& IPAddress)
@@ -63,3 +76,4 @@ void UPuzzlePlatformsGameInstace::ReturnToMainMenu()
 {
 	GetFirstLocalPlayerController()->ClientTravel("/Game/MenuSystem/MainMenu", ETravelType::TRAVEL_Absolute);
 }
+
