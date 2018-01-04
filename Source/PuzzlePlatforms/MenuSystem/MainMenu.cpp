@@ -8,28 +8,6 @@
 #include "Components/EditableTextBox.h"
 
 
-void UMainMenu::Setup()
-{
-	
-	this->AddToViewport();
-	PlayerController = GetWorld()->GetFirstPlayerController();
-	FInputModeUIOnly InputMode;
-	InputMode.SetWidgetToFocus(this->TakeWidget());
-	InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
-	PlayerController->SetInputMode(InputMode);
-	PlayerController->bShowMouseCursor = true;
-}
-
-void UMainMenu::Teardown()
-{
-	this->RemoveFromViewport();
-	PlayerController->bShowMouseCursor = false;
-	FInputModeGameOnly InputMode;
-	PlayerController->SetInputMode(InputMode);
-	
-		
-}
-
 bool UMainMenu::Initialize()
 {
 	bool Succes = Super::Initialize();
@@ -44,6 +22,7 @@ bool UMainMenu::Initialize()
 
 void UMainMenu::HostServer()
 {
+	
 	if (MenuInterface != nullptr) MenuInterface->Host();
 }
 
@@ -64,7 +43,3 @@ void UMainMenu::JoinServer()
 	if (IPAddress.Len() > 0 && MenuInterface != nullptr) MenuInterface->Join(IPAddress); else IPAddressTextBox->SetText(FText::FromString(TEXT("You must enter a valid IP")));
 }
 
-void UMainMenu::SetMenuInterface(IMenuInterface* MenuInterface) {
-
-	this->MenuInterface = MenuInterface;
-}

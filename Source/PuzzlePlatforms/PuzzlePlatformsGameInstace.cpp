@@ -6,13 +6,17 @@
 #include "PlatformTrigger.h"
 #include "Blueprint/UserWidget.h"
 #include "MenuSystem/MainMenu.h"
+#include "MenuSystem/InGameMenu.h"
 
 
 
 UPuzzlePlatformsGameInstace::UPuzzlePlatformsGameInstace(const FObjectInitializer &ObjectInitializer) {
 	ConstructorHelpers::FClassFinder<UUserWidget> PlatformBPClass(TEXT("/Game/MenuSystem/WBP_MainMenu"));
-	if (PlatformBPClass.Class != NULL) {
+	ConstructorHelpers::FClassFinder<UUserWidget> PlatformBPClassGameMenu(TEXT("/Game/MenuSystem/WBP_InGameMenu"));
+
+	if (PlatformBPClass.Class != NULL && PlatformBPClassGameMenu.Class != NULL) {
 		MenuClass = PlatformBPClass.Class;
+		InGameMenuClass = PlatformBPClassGameMenu.Class;
 	}
 }
 
@@ -20,12 +24,19 @@ void UPuzzlePlatformsGameInstace::Init() {
 	UE_LOG(LogTemp, Warning, TEXT("Found Class %s"), *MenuClass->GetName())
 }
 
+void UPuzzlePlatformsGameInstace::LoadInGameMenu()
+{
+	InGameMenu = CreateWidget<UInGameMenu>(this, InGameMenuClass);
+	InGameMenu->Setup();
+	InGameMenu->SetMenuInterface(this);
+}
+
 void UPuzzlePlatformsGameInstace::LoadMenu()
 {
 	Menu = CreateWidget<UMainMenu>(this, MenuClass);
 	Menu->Setup();
 	Menu->SetMenuInterface(this);
-
+	
 }
 
 void UPuzzlePlatformsGameInstace::Host()
@@ -42,4 +53,9 @@ void UPuzzlePlatformsGameInstace::Join(const FString& IPAddress)
 	if (Menu != nullptr) Menu->Teardown();
 	GetEngine()->AddOnScreenDebugMessage(0, 2, FColor::White, FString::Printf(TEXT("Joining %s"), *IPAddress));
 	GetFirstLocalPlayerController()->ClientTravel(IPAddress, ETravelType::TRAVEL_Absolute);
+}
+
+void UPuzzlePlatformsGameInstace::ReturnToMainMenu()
+{
+	GetFirstLocalPlayerController()->ClientTravel("/Game/MenuSystem/MainMenu", ETravelType::TRAVEL_Absolute);
 }

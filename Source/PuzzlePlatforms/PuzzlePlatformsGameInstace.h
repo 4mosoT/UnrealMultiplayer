@@ -8,6 +8,7 @@
 #include "PuzzlePlatformsGameInstace.generated.h"
 
 class UMainMenu;
+class UInGameMenu;
 /**
  * 
  */
@@ -23,13 +24,22 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void LoadMenu();
 
-	UFUNCTION(Exec)
-	void Host();
+	UFUNCTION(BlueprintCallable)
+	void LoadInGameMenu();
 
 	UFUNCTION(Exec)
-	void Join(const FString& IPAddress);
+	virtual void Host() override;
+
+	UFUNCTION(Exec)
+	virtual void Join(const FString& IPAddress) override;
+	 
+	virtual void ReturnToMainMenu() override;
 
 private:
 	TSubclassOf<UUserWidget> MenuClass;
+	TSubclassOf<UUserWidget> InGameMenuClass;
+
 	UMainMenu* Menu;
+	UInGameMenu* InGameMenu;
+
 };
