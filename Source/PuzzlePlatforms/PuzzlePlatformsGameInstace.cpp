@@ -23,8 +23,9 @@ UPuzzlePlatformsGameInstace::UPuzzlePlatformsGameInstace(const FObjectInitialize
 
 void UPuzzlePlatformsGameInstace::Init() {
 	IOnlineSubsystem* OSS = IOnlineSubsystem::Get();
-	if (OSS != nullptr)
-	UE_LOG(LogTemp, Warning, TEXT("Online subsystem: %s"), *OSS->GetSubsystemName().ToString())
+	if (OSS != nullptr)	UE_LOG(LogTemp, Warning, TEXT("Online subsystem: %s"), *OSS->GetSubsystemName().ToString())
+	IOnlineSessionPtr SessionInterface = OSS->GetSessionInterface();
+	if(SessionInterface.IsValid()) UE_LOG(LogTemp, Warning, TEXT("Found Online Session"))
 }
 
 void UPuzzlePlatformsGameInstace::LoadInGameMenu()
