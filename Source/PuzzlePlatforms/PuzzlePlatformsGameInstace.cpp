@@ -30,7 +30,11 @@ void UPuzzlePlatformsGameInstace::Init() {
 	if (OSS != nullptr)	UE_LOG(LogTemp, Warning, TEXT("Online subsystem: %s"), *OSS->GetSubsystemName().ToString())
 	SessionInterface = OSS->GetSessionInterface();
 	SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UPuzzlePlatformsGameInstace::OnCreateSessionComplete);
+	SessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &UPuzzlePlatformsGameInstace::OnFindSessionComplete);
 
+	SessionSearch = MakeShareable(new FOnlineSessionSearch());
+	SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
+	UE_LOG(LogTemp, Warning, TEXT("Find session start"))
 
 }
 
@@ -65,6 +69,11 @@ void UPuzzlePlatformsGameInstace::OnCreateSessionComplete(FName SessionName, boo
 	if(Menu != nullptr)	Menu->Teardown();
 	GetEngine()->AddOnScreenDebugMessage(0, 2, FColor::White, TEXT("Hosting"));
 	GetWorld()->ServerTravel("/Game/ThirdPersonCPP/Maps/ThirdPersonExampleMap?listen");
+}
+
+void UPuzzlePlatformsGameInstace::OnFindSessionComplete(bool Success)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Find session finish"))
 }
 
 void UPuzzlePlatformsGameInstace::Join(const FString& IPAddress)

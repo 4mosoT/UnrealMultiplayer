@@ -11,6 +11,7 @@
 
 class UMainMenu;
 class UInGameMenu;
+class FOnlineSessionSearch;
 
 const static FName SESSION_NAME = TEXT("My session");
 /**
@@ -47,6 +48,7 @@ private:
 	UInGameMenu* InGameMenu;
 
 	void OnCreateSessionComplete(FName SessionName, bool Success);
+	void OnFindSessionComplete(bool Success);
 	IOnlineSessionPtr SessionInterface;
-
+	TSharedPtr<FOnlineSessionSearch> SessionSearch;
 };
