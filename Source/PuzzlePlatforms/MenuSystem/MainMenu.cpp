@@ -72,10 +72,7 @@ void UMainMenu::CancelJoinMenu()
 
 void UMainMenu::JoinServer()
 {
-	//FString IPAddress = IPAddressTextBox->GetText().ToString();
-	//if (IPAddress.Len() > 0 && MenuInterface != nullptr) MenuInterface->Join(IPAddress); else IPAddressTextBox->SetText(FText::FromString(TEXT("You must enter a valid IP")));
-	MenuInterface->Join(TEXT("Prueba"));
-
+	if(SelectedIndex.IsSet()) MenuInterface->Join(SelectedIndex.GetValue());
 }
 
 void UMainMenu::QuitGame()

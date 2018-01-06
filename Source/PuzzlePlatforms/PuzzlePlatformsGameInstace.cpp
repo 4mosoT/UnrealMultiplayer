@@ -31,6 +31,7 @@ void UPuzzlePlatformsGameInstace::Init() {
 	SessionInterface = OSS->GetSessionInterface();
 	SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UPuzzlePlatformsGameInstace::OnCreateSessionComplete);
 	SessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &UPuzzlePlatformsGameInstace::OnFindSessionComplete);
+	SessionInterface->OnJoinSessionCompleteDelegates.AddUObject(this, &UPuzzlePlatformsGameInstace::OnJoinSessionComplete);
 }
 
 void UPuzzlePlatformsGameInstace::LoadInGameMenu()
@@ -80,14 +81,22 @@ void UPuzzlePlatformsGameInstace::OnFindSessionComplete(bool Success)
 	Menu->SetServerList(ServerNames);
 }
 
-void UPuzzlePlatformsGameInstace::Join(const FString& IPAddress)
+void UPuzzlePlatformsGameInstace::OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result)
+{
+	FString Address;
+	SessionInterface->GetResolvedConnectString(SessionName, Address);
+	GetEngine()->AddOnScreenDebugMessage(0, 2, FColor::White, FString::Printf(TEXT("Joining %s"), *Address));
+	GetFirstLocalPlayerController()->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
+}
+
+void UPuzzlePlatformsGameInstace::Join(int32 Index)
 {
 	if (Menu != nullptr) {
-		Menu->SetServerList({"Test1", "Test2"});
-		//Menu->Teardown();
+		Menu->Teardown();
 	}
-	//GetEngine()->AddOnScreenDebugMessage(0, 2, FColor::White, FString::Printf(TEXT("Joining %s"), *IPAddress));
-	//GetFirstLocalPlayerController()->ClientTravel(IPAddress, ETravelType::TRAVEL_Absolute);
+
+	SessionInterface->JoinSession(0, SESSION_NAME, SessionSearch->SearchResults[Index]);
+
 }
 
 void UPuzzlePlatformsGameInstace::ReturnToMainMenu()
