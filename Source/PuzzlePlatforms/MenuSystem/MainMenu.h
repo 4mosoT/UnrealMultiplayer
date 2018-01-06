@@ -24,6 +24,8 @@ public:
 	
 	void SetServerList(TArray<FString> ServerList);
 
+	void SelectIndex(int32 Index);
+
 protected:
 
 	virtual bool Initialize() override;
@@ -73,6 +75,8 @@ private:
 	void QuitGame();
 
 	TSubclassOf<UUserWidget> RowServerClass;
+
+	TOptional<int32> SelectedIndex;
 
 
 	

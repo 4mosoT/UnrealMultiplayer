@@ -21,16 +21,25 @@ UMainMenu::UMainMenu(const FObjectInitializer & ObjectInitializer) {
 void UMainMenu::SetServerList(TArray<FString> ServerNameList)
 {
 	ServerList->ClearChildren();
+	int32 i = 0;
 	for (const FString& ServerName : ServerNameList) {
 		UServerRow* RowServer = CreateWidget<UServerRow>(GetWorld(), RowServerClass);
 		RowServer->ServerName->SetText(FText::FromString(ServerName));
+		RowServer->Setup(this, i);
 		ServerList->AddChild(RowServer);
+		i++;
 	}
+}
+
+void UMainMenu::SelectIndex(int32 Index)
+{
+	SelectedIndex = Index;
+	UE_LOG(LogTemp, Warning, TEXT("Selecting Index: %i"), Index)
 }
 
 bool UMainMenu::Initialize()
 {
-	bool Succes = Super::Initialize();
+	bool Success = Super::Initialize();
 
 	HostButton->OnClicked.AddDynamic(this, &UMainMenu::HostServer);
 	JoinButton->OnClicked.AddDynamic(this, &UMainMenu::OpenJoinMenu);
@@ -38,10 +47,7 @@ bool UMainMenu::Initialize()
 	AcceptJoinButton->OnClicked.AddDynamic(this, &UMainMenu::JoinServer);
 	QuitButton->OnClicked.AddDynamic(this, &UMainMenu::QuitGame);
 
-
-
-
-	return true;
+	return true & Success;
 }
 
 void UMainMenu::HostServer()
