@@ -6,6 +6,15 @@
 #include "Engine/World.h"
 #include "MenuInterface.h"
 #include "Components/EditableTextBox.h"
+#include "UObject/ConstructorHelpers.h"
+#include "ServerRow.h"
+
+UMainMenu::UMainMenu(const FObjectInitializer & ObjectInitializer) {
+
+	ConstructorHelpers::FClassFinder<UUserWidget> BPRowClass(TEXT("/Game/MenuSystem/WBP_RowServer"));
+	if(BPRowClass.Class != NULL) RowServerClass = BPRowClass.Class;
+
+}
 
 
 bool UMainMenu::Initialize()
@@ -17,6 +26,9 @@ bool UMainMenu::Initialize()
 	CancelJoinButton->OnClicked.AddDynamic(this, &UMainMenu::CancelJoinMenu);
 	AcceptJoinButton->OnClicked.AddDynamic(this, &UMainMenu::JoinServer);
 	QuitButton->OnClicked.AddDynamic(this, &UMainMenu::QuitGame);
+
+
+
 
 	return true;
 }
@@ -30,6 +42,7 @@ void UMainMenu::HostServer()
 void UMainMenu::OpenJoinMenu()
 {
 	MenuSwitcher->SetActiveWidget(JoinMenu);
+
 }
 
 void UMainMenu::CancelJoinMenu()
@@ -40,8 +53,11 @@ void UMainMenu::CancelJoinMenu()
 
 void UMainMenu::JoinServer()
 {
-	FString IPAddress = IPAddressTextBox->GetText().ToString();
-	if (IPAddress.Len() > 0 && MenuInterface != nullptr) MenuInterface->Join(IPAddress); else IPAddressTextBox->SetText(FText::FromString(TEXT("You must enter a valid IP")));
+	//FString IPAddress = IPAddressTextBox->GetText().ToString();
+	//if (IPAddress.Len() > 0 && MenuInterface != nullptr) MenuInterface->Join(IPAddress); else IPAddressTextBox->SetText(FText::FromString(TEXT("You must enter a valid IP")));
+	
+	UServerRow* RowServer = CreateWidget<UServerRow>(GetWorld(), RowServerClass);
+	ServerList->AddChild(RowServer);
 }
 
 void UMainMenu::QuitGame()

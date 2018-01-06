@@ -10,6 +10,7 @@ class UWidget;
 class UEditableTextBox;
 class UButton;
 class UWidgetSwitcher;
+class UPanelWidget;
 /**
  * 
  */
@@ -17,6 +18,10 @@ UCLASS()
 class PUZZLEPLATFORMS_API UMainMenu : public UMenuWidget
 {
 	GENERATED_BODY()
+
+public:
+	UMainMenu(const FObjectInitializer & ObjectInitializer);
+			
 
 protected:
 
@@ -49,7 +54,7 @@ private:
 	UButton* AcceptJoinButton;
 
 	UPROPERTY(meta = (BindWidget))
-	UEditableTextBox* IPAddressTextBox;
+	UPanelWidget* ServerList;
 
 	UFUNCTION()
 	void HostServer();
@@ -65,6 +70,9 @@ private:
 
 	UFUNCTION()
 	void QuitGame();
+
+	TSubclassOf<UUserWidget> RowServerClass;
+
 
 	
 };
