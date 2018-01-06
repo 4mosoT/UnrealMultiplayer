@@ -24,5 +24,6 @@ public:
 	virtual void Host() = 0;
 	virtual void Join(const FString& IPAddress) = 0;
 	virtual void ReturnToMainMenu() = 0;
+	virtual void RefreshServerList() = 0;
 
 };

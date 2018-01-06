@@ -31,12 +31,6 @@ void UPuzzlePlatformsGameInstace::Init() {
 	SessionInterface = OSS->GetSessionInterface();
 	SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UPuzzlePlatformsGameInstace::OnCreateSessionComplete);
 	SessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &UPuzzlePlatformsGameInstace::OnFindSessionComplete);
-
-	SessionSearch = MakeShareable(new FOnlineSessionSearch());
-	SessionSearch->bIsLanQuery = true;	
-	SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
-	UE_LOG(LogTemp, Warning, TEXT("Find session start"))
-
 }
 
 void UPuzzlePlatformsGameInstace::LoadInGameMenu()
@@ -76,24 +70,36 @@ void UPuzzlePlatformsGameInstace::OnCreateSessionComplete(FName SessionName, boo
 }
 
 void UPuzzlePlatformsGameInstace::OnFindSessionComplete(bool Success)
-{
-		for (const FOnlineSessionSearchResult& Session : SessionSearch->SearchResults) {
-			UE_LOG(LogTemp, Warning, TEXT("Find session: %s"), *Session.GetSessionIdStr())
-			
+{	
+	TArray<FString> ServerNames;
+	for (const FOnlineSessionSearchResult& Session : SessionSearch->SearchResults) {
+		UE_LOG(LogTemp, Warning, TEXT("Find session: %s"), *Session.GetSessionIdStr())
+			ServerNames.Add(Session.GetSessionIdStr());
 		}
-		UE_LOG(LogTemp, Warning, TEXT("Find session finish"))
-
+	UE_LOG(LogTemp, Warning, TEXT("Find session finish"))
+	Menu->SetServerList(ServerNames);
 }
 
 void UPuzzlePlatformsGameInstace::Join(const FString& IPAddress)
 {
-	if (Menu != nullptr) Menu->Teardown();
-	GetEngine()->AddOnScreenDebugMessage(0, 2, FColor::White, FString::Printf(TEXT("Joining %s"), *IPAddress));
-	GetFirstLocalPlayerController()->ClientTravel(IPAddress, ETravelType::TRAVEL_Absolute);
+	if (Menu != nullptr) {
+		Menu->SetServerList({"Test1", "Test2"});
+		//Menu->Teardown();
+	}
+	//GetEngine()->AddOnScreenDebugMessage(0, 2, FColor::White, FString::Printf(TEXT("Joining %s"), *IPAddress));
+	//GetFirstLocalPlayerController()->ClientTravel(IPAddress, ETravelType::TRAVEL_Absolute);
 }
 
 void UPuzzlePlatformsGameInstace::ReturnToMainMenu()
 {
 	GetFirstLocalPlayerController()->ClientTravel("/Game/MenuSystem/MainMenu", ETravelType::TRAVEL_Absolute);
+}
+
+void UPuzzlePlatformsGameInstace::RefreshServerList()
+{
+	SessionSearch = MakeShareable(new FOnlineSessionSearch());
+	SessionSearch->bIsLanQuery = true;
+	SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
+	UE_LOG(LogTemp, Warning, TEXT("Find session start"))
 }
 

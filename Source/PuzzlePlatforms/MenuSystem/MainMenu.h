@@ -21,7 +21,8 @@ class PUZZLEPLATFORMS_API UMainMenu : public UMenuWidget
 
 public:
 	UMainMenu(const FObjectInitializer & ObjectInitializer);
-			
+	
+	void SetServerList(TArray<FString> ServerList);
 
 protected:
 

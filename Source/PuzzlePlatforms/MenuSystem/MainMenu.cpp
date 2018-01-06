@@ -7,6 +7,7 @@
 #include "MenuInterface.h"
 #include "Components/EditableTextBox.h"
 #include "UObject/ConstructorHelpers.h"
+#include "Components/TextBlock.h"
 #include "ServerRow.h"
 
 UMainMenu::UMainMenu(const FObjectInitializer & ObjectInitializer) {
@@ -16,6 +17,16 @@ UMainMenu::UMainMenu(const FObjectInitializer & ObjectInitializer) {
 
 }
 
+
+void UMainMenu::SetServerList(TArray<FString> ServerNameList)
+{
+	ServerList->ClearChildren();
+	for (const FString& ServerName : ServerNameList) {
+		UServerRow* RowServer = CreateWidget<UServerRow>(GetWorld(), RowServerClass);
+		RowServer->ServerName->SetText(FText::FromString(ServerName));
+		ServerList->AddChild(RowServer);
+	}
+}
 
 bool UMainMenu::Initialize()
 {
@@ -41,7 +52,9 @@ void UMainMenu::HostServer()
 
 void UMainMenu::OpenJoinMenu()
 {
+	MenuInterface->RefreshServerList();
 	MenuSwitcher->SetActiveWidget(JoinMenu);
+
 
 }
 
@@ -55,9 +68,8 @@ void UMainMenu::JoinServer()
 {
 	//FString IPAddress = IPAddressTextBox->GetText().ToString();
 	//if (IPAddress.Len() > 0 && MenuInterface != nullptr) MenuInterface->Join(IPAddress); else IPAddressTextBox->SetText(FText::FromString(TEXT("You must enter a valid IP")));
-	
-	UServerRow* RowServer = CreateWidget<UServerRow>(GetWorld(), RowServerClass);
-	ServerList->AddChild(RowServer);
+	MenuInterface->Join(TEXT("Prueba"));
+
 }
 
 void UMainMenu::QuitGame()
