@@ -29,6 +29,8 @@ void UPuzzlePlatformsGameInstace::Init() {
 	IOnlineSubsystem* OSS = IOnlineSubsystem::Get();
 	if (OSS != nullptr)	UE_LOG(LogTemp, Warning, TEXT("Online subsystem: %s"), *OSS->GetSubsystemName().ToString())
 	SessionInterface = OSS->GetSessionInterface();
+	SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UPuzzlePlatformsGameInstace::OnCreateSessionComplete);
+
 
 }
 
@@ -49,9 +51,9 @@ void UPuzzlePlatformsGameInstace::LoadMenuWidget()
 
 void UPuzzlePlatformsGameInstace::Host() 
 {
+	if (SessionInterface->GetNamedSession(SESSION_NAME)) SessionInterface->DestroySession(SESSION_NAME);
 	FOnlineSessionSettings SessionSettings;
-	SessionInterface->CreateSession(0, TEXT("My Session Game"), SessionSettings);
-	SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UPuzzlePlatformsGameInstace::OnCreateSessionComplete);
+	SessionInterface->CreateSession(0, SESSION_NAME, SessionSettings);
 }
 
 void UPuzzlePlatformsGameInstace::OnCreateSessionComplete(FName SessionName, bool Success)

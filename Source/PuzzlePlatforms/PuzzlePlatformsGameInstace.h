@@ -11,6 +11,8 @@
 
 class UMainMenu;
 class UInGameMenu;
+
+const static FName SESSION_NAME = TEXT("My session");
 /**
  * 
  */
