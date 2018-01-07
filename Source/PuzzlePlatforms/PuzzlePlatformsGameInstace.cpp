@@ -53,9 +53,10 @@ void UPuzzlePlatformsGameInstace::Host()
 {
 	if (SessionInterface->GetNamedSession(SESSION_NAME)) SessionInterface->DestroySession(SESSION_NAME);
 	FOnlineSessionSettings SessionSettings;
-	SessionSettings.bIsLANMatch = true;
+	SessionSettings.bIsLANMatch = false;
 	SessionSettings.NumPublicConnections = 2;
 	SessionSettings.bShouldAdvertise = true;
+	SessionSettings.bUsesPresence = true;
 	SessionInterface->CreateSession(0, SESSION_NAME, SessionSettings);
 }
 
@@ -107,7 +108,9 @@ void UPuzzlePlatformsGameInstace::ReturnToMainMenu()
 void UPuzzlePlatformsGameInstace::RefreshServerList()
 {
 	SessionSearch = MakeShareable(new FOnlineSessionSearch());
-	SessionSearch->bIsLanQuery = true;
+	//SessionSearch->bIsLanQuery = true;
+	SessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);
+	SessionSearch->MaxSearchResults = 100;
 	SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
 	UE_LOG(LogTemp, Warning, TEXT("Find session start"))
 }
